@@ -10,6 +10,8 @@ export default function Hero() {
   const videoRef   = useRef<HTMLVideoElement | null>(null);
   const tickingRef = useRef(false);
   const textRef    = useRef<HTMLDivElement>(null);
+  const cssSizeRef = useRef({ w: 0, h: 0 });
+  const rafIdRef   = useRef(0);
 
   const [videoReady, setVideoReady] = useState(false);
   const [showCta,    setShowCta]    = useState(false);
@@ -24,9 +26,8 @@ export default function Hero() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const dpr = window.devicePixelRatio || 1;
-    const cw  = canvas.width  / dpr;   // CSS pixels
-    const ch  = canvas.height / dpr;
+    const { w: cw, h: ch } = cssSizeRef.current;
+    if (!cw || !ch) return;
     const vw  = video.videoWidth;
     const vh  = video.videoHeight;
     if (!vw || !vh) return;
@@ -61,6 +62,7 @@ export default function Hero() {
       video.removeEventListener("canplaythrough", onReady);
       video.removeEventListener("seeked", onSeeked);
       video.src = "";
+      video.load();
     };
   }, [drawFrame]);
 
@@ -78,6 +80,7 @@ export default function Hero() {
       canvas.height       = window.innerHeight * dpr;
       canvas.style.width  = `${window.innerWidth}px`;
       canvas.style.height = `${window.innerHeight}px`;
+      cssSizeRef.current  = { w: window.innerWidth, h: window.innerHeight };
 
       // Scale context once — all subsequent drawImage calls use CSS pixel coords
       const ctx = canvas.getContext("2d");
@@ -99,7 +102,7 @@ export default function Hero() {
       if (tickingRef.current) return;
       tickingRef.current = true;
 
-      requestAnimationFrame(() => {
+      rafIdRef.current = requestAnimationFrame(() => {
         const section = sectionRef.current;
         const video   = videoRef.current;
 
@@ -110,6 +113,10 @@ export default function Hero() {
 
         const rect       = section.getBoundingClientRect();
         const scrollable = section.offsetHeight - window.innerHeight;
+        if (scrollable <= 0) {
+          tickingRef.current = false;
+          return;
+        }
         const progress   = Math.min(1, Math.max(0, -rect.top / scrollable));
 
         // 1. Seek video → triggers 'seeked' → drawFrame
@@ -132,7 +139,10 @@ export default function Hero() {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      cancelAnimationFrame(rafIdRef.current);
+    };
   }, [videoReady]);
 
   // ── Render ────────────────────────────────────────────────────────────────
