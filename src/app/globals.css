@@ -11,14 +11,13 @@
   padding: 0;
 }
 
-html {
-  scroll-behavior: auto;
-  background: #0d0d0d;
+html,
+body {
+  background: var(--color-background);
 }
 
 body {
-  background: #0d0d0d;
-  color: #ffffff;
+  color: var(--color-foreground);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
