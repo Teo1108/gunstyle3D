@@ -1,0 +1,257 @@
+[
+  {
+    "id": "1",
+    "name": "Premium Black Tee",
+    "category": "T-Shirts",
+    "price": 45,
+    "rating": 4.8,
+    "isNew": true,
+    "description": "A timeless black tee tailored for creators.",
+    "images": [
+      "/images/1.jpg",
+      "/images/uploads/1781580824202-Gemini_Generated_Image_5aqj3x5aqj3x5aqj.png",
+      "/images/uploads/1781580921265-618074979_17944670802101158_1397812716841480191_n.jpg"
+    ],
+    "catalogImage": "/images/1.jpg",
+    "sizes": {
+      "XS": true,
+      "S": true,
+      "M": true,
+      "L": true,
+      "XL": true,
+      "XXL": true
+    }
+  },
+  {
+    "id": "2",
+    "name": "Code & Creator T-Shirt",
+    "category": "T-Shirts",
+    "price": 45,
+    "rating": 4.7,
+    "isNew": false,
+    "description": "Clean white tee with subtle code snippets.",
+    "images": [
+      "/images/2.jpg"
+    ],
+    "catalogImage": "/images/2.jpg",
+    "sizes": {
+      "XS": true,
+      "S": true,
+      "M": true,
+      "L": true,
+      "XL": true,
+      "XXL": true
+    }
+  },
+  {
+    "id": "3",
+    "name": "Dark Mode Forever Hoodie",
+    "category": "Hoodies",
+    "price": 75,
+    "rating": 4.9,
+    "isNew": true,
+    "description": "For those who prefer their environments dark.",
+    "images": [
+      "/images/3.jpg",
+      "/images/uploads/1781580857204-625271201_18126523288546267_4248852034393177650_n.jpg"
+    ],
+    "catalogImage": "/images/3.jpg",
+    "sizes": {
+      "XS": true,
+      "S": true,
+      "M": true,
+      "L": true,
+      "XL": true,
+      "XXL": true
+    }
+  },
+  {
+    "id": "4",
+    "name": "Neural Network Hoodie",
+    "category": "Hoodies",
+    "price": 75,
+    "rating": 4.6,
+    "isNew": false,
+    "description": "Stay warm while training your models.",
+    "images": [
+      "/images/4.jpg"
+    ],
+    "catalogImage": "/images/4.jpg",
+    "sizes": {
+      "XS": true,
+      "S": true,
+      "M": true,
+      "L": true,
+      "XL": true,
+      "XXL": true
+    }
+  },
+  {
+    "id": "5",
+    "name": "AI Commuter Backpack",
+    "category": "Accessories",
+    "price": 95,
+    "rating": 4.8,
+    "isNew": false,
+    "description": "Perfect for tech and gear on the go.",
+    "images": [
+      "/images/5.jpg"
+    ],
+    "catalogImage": "/images/5.jpg",
+    "sizes": {
+      "XS": true,
+      "S": true,
+      "M": true,
+      "L": true,
+      "XL": true,
+      "XXL": true
+    }
+  },
+  {
+    "id": "6",
+    "name": "Minimal Tech iPhone Case",
+    "category": "Accessories",
+    "price": 25,
+    "rating": 4.5,
+    "isNew": true,
+    "description": "Protect your devices in style.",
+    "images": [
+      "/images/6.jpg"
+    ],
+    "catalogImage": "/images/6.jpg",
+    "sizes": {
+      "XS": true,
+      "S": true,
+      "M": true,
+      "L": true,
+      "XL": true,
+      "XXL": true
+    }
+  },
+  {
+    "id": "7",
+    "name": "Premium AI Pen",
+    "category": "Accessories",
+    "price": 15,
+    "rating": 4.7,
+    "isNew": false,
+    "description": "For those who need to take physical notes.",
+    "images": [
+      "/images/7.jpg"
+    ],
+    "catalogImage": "/images/7.jpg",
+    "sizes": {
+      "XS": true,
+      "S": true,
+      "M": true,
+      "L": true,
+      "XL": true,
+      "XXL": true
+    }
+  },
+  {
+    "id": "8",
+    "name": "Street Style Tee",
+    "category": "T-Shirts",
+    "price": 45,
+    "rating": 4.6,
+    "isNew": true,
+    "description": "Bold streetwear for the modern creator.",
+    "images": [
+      "/images/8.jpg"
+    ],
+    "catalogImage": "/images/8.jpg",
+    "sizes": {
+      "XS": true,
+      "S": true,
+      "M": true,
+      "L": true,
+      "XL": true,
+      "XXL": true
+    }
+  },
+  {
+    "id": "9",
+    "name": "Urban Zip Hoodie",
+    "category": "Hoodies",
+    "price": 80,
+    "rating": 4.7,
+    "isNew": false,
+    "description": "Heavyweight zip hoodie for urban explorers.",
+    "images": [
+      "/images/9.jpg"
+    ],
+    "catalogImage": "/images/9.jpg",
+    "sizes": {
+      "XS": true,
+      "S": true,
+      "M": true,
+      "L": true,
+      "XL": true,
+      "XXL": true
+    }
+  },
+  {
+    "id": "10",
+    "name": "GunStyle Cap",
+    "category": "Accessories",
+    "price": 30,
+    "rating": 4.5,
+    "isNew": true,
+    "description": "Classic cap with embroidered logo.",
+    "images": [
+      "/images/10.jpg"
+    ],
+    "catalogImage": "/images/10.jpg",
+    "sizes": {
+      "XS": true,
+      "S": true,
+      "M": true,
+      "L": true,
+      "XL": true,
+      "XXL": true
+    }
+  },
+  {
+    "id": "11",
+    "name": "Tactical Tote Bag",
+    "category": "Accessories",
+    "price": 55,
+    "rating": 4.8,
+    "isNew": false,
+    "description": "Durable tote for everyday carry.",
+    "images": [
+      "/images/11.jpg"
+    ],
+    "catalogImage": "/images/11.jpg",
+    "sizes": {
+      "XS": true,
+      "S": true,
+      "M": true,
+      "L": true,
+      "XL": true,
+      "XXL": true
+    }
+  },
+  {
+    "id": "12",
+    "name": "Signature Graphic Tee",
+    "category": "T-Shirts",
+    "price": 50,
+    "rating": 4.9,
+    "isNew": true,
+    "description": "Limited edition graphic tee.",
+    "images": [
+      "/images/12.jpg"
+    ],
+    "catalogImage": "/images/12.jpg",
+    "sizes": {
+      "XS": true,
+      "S": true,
+      "M": true,
+      "L": true,
+      "XL": true,
+      "XXL": true
+    }
+  }
+]

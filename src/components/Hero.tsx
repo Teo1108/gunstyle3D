@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState, useCallback } from "react";
+import Link from "next/link";
 
 const TEXT_FADE_END = 0.08;  // progress where text fully disappears
 const CTA_THRESHOLD = 0.85;  // progress where end CTA appears
@@ -32,8 +33,8 @@ export default function Hero() {
     const vh  = video.videoHeight;
     if (!vw || !vh) return;
 
-    // Cover-fit: scale so the video fills the canvas, centered
-    const scale  = Math.max(cw / vw, ch / vh);
+    // Contain-fit: scale so the full video is visible, centered
+    const scale  = Math.min(cw / vw, ch / vh);
     const drawW  = vw * scale;
     const drawH  = vh * scale;
     const drawX  = (cw - drawW) / 2;
@@ -106,29 +107,20 @@ export default function Hero() {
         const section = sectionRef.current;
         const video   = videoRef.current;
 
-        if (!section || !video || !video.duration) {
-          tickingRef.current = false;
-          return;
-        }
+        if (!section || !video || !video.duration) { tickingRef.current = false; return; }
 
         const rect       = section.getBoundingClientRect();
         const scrollable = section.offsetHeight - window.innerHeight;
-        if (scrollable <= 0) {
-          tickingRef.current = false;
-          return;
-        }
-        const progress   = Math.min(1, Math.max(0, -rect.top / scrollable));
+        if (scrollable <= 0) { tickingRef.current = false; return; }
 
-        // 1. Seek video → triggers 'seeked' → drawFrame
+        const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
+
         video.currentTime = progress * video.duration;
 
-        // 2. Fade text via direct DOM (avoids React re-render on every tick)
         if (textRef.current) {
-          const opacity = Math.max(0, 1 - progress / TEXT_FADE_END);
-          textRef.current.style.opacity = String(opacity);
+          textRef.current.style.opacity = String(Math.max(0, 1 - progress / TEXT_FADE_END));
         }
 
-        // 3. Toggle CTA — React state is fine because it's a discrete threshold
         setShowCta((prev) => {
           const next = progress >= CTA_THRESHOLD;
           return prev === next ? prev : next;
@@ -152,7 +144,6 @@ export default function Hero() {
       style={{ height: "500vh" }}
       className="relative bg-[#0d0d0d]"
     >
-      {/* Sticky viewport — pins to screen while section scrolls */}
       <div
         className="sticky top-0 h-screen overflow-hidden"
         style={{ willChange: "transform", transform: "translateZ(0)" }}
@@ -168,7 +159,7 @@ export default function Hero() {
         />
 
         {/* Dark overlay so text is always legible against the video */}
-        <div className="absolute inset-0 bg-black/35 pointer-events-none" />
+        <div className="absolute inset-0 bg-black/30 pointer-events-none" />
 
         {/* ── Centered text (fades out during first 8% of scroll) ── */}
         <div
@@ -224,11 +215,6 @@ export default function Hero() {
             Ropa Oversize · Street Wear
           </p>
 
-          {/* CTA button — pointer-events re-enabled on this child only */}
-          <button className="pointer-events-auto mt-5 px-5 py-2 text-[8px] tracking-[4px] uppercase border border-[#f5a623] text-[#f5a623] hover:bg-[#f5a623] hover:text-black transition-colors duration-300">
-            Ver Colección →
-          </button>
-
           {/* Scroll hint */}
           <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 opacity-40">
             <span className="text-[7px] text-white tracking-[3px] uppercase select-none">
@@ -275,9 +261,9 @@ export default function Hero() {
           >
             NOW
           </h2>
-          <button className="pointer-events-auto px-8 py-3 border border-[#f5a623] text-[#f5a623] text-[10px] tracking-[4px] uppercase hover:bg-[#f5a623] hover:text-black transition-colors duration-300">
+          <Link href="/catalog" className="pointer-events-auto px-8 py-3 border border-[#f5a623] text-[#f5a623] text-[10px] tracking-[4px] uppercase hover:bg-[#f5a623] hover:text-black transition-colors duration-300">
             Ver Colección →
-          </button>
+          </Link>
         </div>
       </div>
     </section>
