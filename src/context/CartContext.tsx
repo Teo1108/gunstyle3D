@@ -12,43 +12,63 @@ type CartContextValue = {
   fetchCart: () => void;
 };
 
+const STORAGE_KEY = 'gs_cart';
 const CartContext = createContext<CartContextValue | null>(null);
+
+function readStorage(): CartItem[] {
+  if (typeof window === 'undefined') return [];
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]'); }
+  catch { return []; }
+}
+
+function writeStorage(items: CartItem[]) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+}
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchCart = useCallback(() => {
-    setLoading(true);
-    fetch("/api/cart")
-      .then((r) => r.json())
-      .then((d) => { if (d.success) setCart(d.data); })
-      .catch(console.error)
-      .finally(() => setLoading(false));
+    setCart(readStorage());
+    setLoading(false);
   }, []);
 
   useEffect(() => { fetchCart(); }, [fetchCart]);
 
   const updateCart = useCallback((productId: string, quantity: number, size?: string) => {
-    fetch("/api/cart", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ productId, quantity, size }),
-    })
-      .then((r) => r.json())
-      .then((d) => { if (d.success) setCart(d.data); });
+    setCart(prev => {
+      const next = [...prev];
+      const idx = next.findIndex(i => i.productId === productId && i.size === size);
+      if (idx >= 0) {
+        if (quantity <= 0) next.splice(idx, 1);
+        else next[idx] = { ...next[idx], quantity };
+      } else if (quantity > 0) {
+        next.push({ productId, quantity, size });
+      }
+      writeStorage(next);
+      return next;
+    });
   }, []);
 
   const addToCart = useCallback((productId: string, size?: string) => {
-    const existing = cart.find((c) => c.productId === productId && c.size === size);
-    updateCart(productId, existing ? existing.quantity + 1 : 1, size);
-  }, [cart, updateCart]);
+    setCart(prev => {
+      const existing = prev.find(i => i.productId === productId && i.size === size);
+      const next = existing
+        ? prev.map(i => i.productId === productId && i.size === size
+            ? { ...i, quantity: i.quantity + 1 } : i)
+        : [...prev, { productId, quantity: 1, size }];
+      writeStorage(next);
+      return next;
+    });
+  }, []);
 
   const removeCartItem = useCallback((productId: string, size?: string) => {
-    const query = size ? `?size=${encodeURIComponent(size)}` : "";
-    fetch(`/api/cart/${productId}${query}`, { method: "DELETE" })
-      .then((r) => r.json())
-      .then((d) => { if (d.success) setCart(d.data); });
+    setCart(prev => {
+      const next = prev.filter(i => !(i.productId === productId && i.size === size));
+      writeStorage(next);
+      return next;
+    });
   }, []);
 
   return (
