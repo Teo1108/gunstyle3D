@@ -120,7 +120,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
           Talle {selectedSize && <span style={{ color: "var(--gs-gold)", fontWeight: 700 }}>— {selectedSize}</span>}
         </p>
         <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginBottom: "32px" }}>
-          {Object.entries(product.sizes || {}).map(([size, available]) => (
+          {Object.entries(product.sizes as Record<string, boolean> || {}).map(([size, available]) => (
             available && (
               <button
                 key={size}
