@@ -1,32 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { supabaseServer } from '@/lib/supabase';
 
-export async function GET(request: NextRequest) {
-  try {
-    const response = await fetch('http://localhost:3001/api/products', {
-      method: 'GET',
-    });
-    const data = await response.json();
-    return NextResponse.json(data);
-  } catch (error) {
-    return NextResponse.json({ success: false, message: 'Error de conexión' }, { status: 500 });
-  }
+function mapProduct(row: any) {
+  return {
+    id: row.id,
+    name: row.name,
+    category: row.category,
+    price: row.price,
+    rating: row.rating,
+    isNew: row.is_new,
+    description: row.description,
+    images: row.images ?? [],
+    catalogImage: row.catalog_image,
+    sizes: row.sizes ?? {},
+  };
+}
+
+export async function GET() {
+  const { data, error } = await supabaseServer().from('products').select('*');
+  if (error) return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+  return NextResponse.json({ success: true, data: data.map(mapProduct) });
 }
 
 export async function POST(request: NextRequest) {
-  try {
-    const authHeader = request.headers.get('authorization') || '';
-    const body = await request.json();
-    const response = await fetch('http://localhost:3001/api/products', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': authHeader,
-      },
-      body: JSON.stringify(body),
-    });
-    const data = await response.json();
-    return NextResponse.json(data, { status: response.status });
-  } catch (error) {
-    return NextResponse.json({ success: false, message: 'Error de conexión' }, { status: 500 });
-  }
+  // Auth + implementation in Task 5
+  return NextResponse.json({ success: false, message: 'Not implemented' }, { status: 501 });
 }

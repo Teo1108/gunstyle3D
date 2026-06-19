@@ -1,58 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { supabaseServer } from '@/lib/supabase';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const { id } = await params;
-    const response = await fetch(`http://localhost:3001/api/products/${id}`, {
-      method: 'GET',
-    });
-    const data = await response.json();
-    return NextResponse.json(data, { status: response.status });
-  } catch (error) {
-    return NextResponse.json({ success: false, message: 'Error de conexión' }, { status: 500 });
-  }
+type Params = { params: Promise<{ id: string }> };
+
+function mapProduct(row: any) {
+  return {
+    id: row.id,
+    name: row.name,
+    category: row.category,
+    price: row.price,
+    rating: row.rating,
+    isNew: row.is_new,
+    description: row.description,
+    images: row.images ?? [],
+    catalogImage: row.catalog_image,
+    sizes: row.sizes ?? {},
+  };
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const { id } = await params;
-    const authHeader = request.headers.get('authorization') || '';
-    const body = await request.json();
-    const response = await fetch(`http://localhost:3001/api/products/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': authHeader,
-      },
-      body: JSON.stringify(body),
-    });
-    const data = await response.json();
-    return NextResponse.json(data, { status: response.status });
-  } catch (error) {
-    return NextResponse.json({ success: false, message: 'Error de conexión' }, { status: 500 });
-  }
+export async function GET(_req: NextRequest, { params }: Params) {
+  const { id } = await params;
+  const { data, error } = await supabaseServer()
+    .from('products').select('*').eq('id', id).single();
+  if (error || !data)
+    return NextResponse.json({ success: false, message: 'Not found' }, { status: 404 });
+  return NextResponse.json({ success: true, data: mapProduct(data) });
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const { id } = await params;
-    const authHeader = request.headers.get('authorization') || '';
-    const response = await fetch(`http://localhost:3001/api/products/${id}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': authHeader },
-    });
-    const data = await response.json();
-    return NextResponse.json(data, { status: response.status });
-  } catch (error) {
-    return NextResponse.json({ success: false, message: 'Error de conexión' }, { status: 500 });
-  }
+export async function PUT(_req: NextRequest, { params }: Params) {
+  return NextResponse.json({ success: false, message: 'Not implemented' }, { status: 501 });
+}
+
+export async function DELETE(_req: NextRequest, { params }: Params) {
+  return NextResponse.json({ success: false, message: 'Not implemented' }, { status: 501 });
 }
