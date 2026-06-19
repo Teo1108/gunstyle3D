@@ -1,16 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { signToken } from '@/lib/jwt';
 
 export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const response = await fetch('http://localhost:3001/api/admin/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-    const data = await response.json();
-    return NextResponse.json(data);
-  } catch (error) {
-    return NextResponse.json({ success: false, message: 'Error de conexión con el servidor' }, { status: 500 });
+  const { password } = await request.json();
+  if (password !== process.env.ADMIN_PASSWORD) {
+    return NextResponse.json({ success: false, message: 'Credenciales inválidas' }, { status: 401 });
   }
+  const token = await signToken();
+  return NextResponse.json({ success: true, token });
 }
